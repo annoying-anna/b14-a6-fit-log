@@ -4,11 +4,15 @@ import Hero from "@/components/Hero";
 import LibrarySection from "@/components/LibrarySection";
 import { getWorkouts } from "@/lib/api";
 
-// The library always comes from the API, so this route renders on demand.
-export const dynamic = "force-dynamic";
+/**
+ * The GitHub Pages preview build is fully static and pre-renders this page.
+ * Every other build fetches without caching, which keeps the route dynamic and
+ * makes the "Loading workouts…" state real for every visitor.
+ */
+const isStaticExport = process.env.NEXT_STATIC_EXPORT === "1";
 
 export default async function HomePage() {
-  const workouts = await getWorkouts({ fresh: true });
+  const workouts = await getWorkouts({ fresh: !isStaticExport });
 
   return (
     <>

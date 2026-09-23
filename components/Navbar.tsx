@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bookmark, Dumbbell } from "lucide-react";
 
+import PublicImage from "@/components/PublicImage";
 import { usePlan } from "@/context/PlanContext";
 import { PLAN_LIMIT } from "@/lib/constants";
 
@@ -21,14 +21,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-line bg-ink/85 backdrop-blur">
       <div className="shell flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-3 lg:flex-nowrap">
         <Link href="/" className="flex items-center gap-2.5" aria-label="FitLog home">
-          <Image
-            src="/fitlog-logo.png"
-            alt=""
-            width={28}
-            height={28}
-            priority
-            className="h-7 w-7"
-          />
+          <PublicImage src="/fitlog-logo.png" alt="" width={28} height={28} eager className="h-7 w-7" />
           <span className="font-display text-xl font-bold uppercase tracking-[0.22em] text-white">
             Fit<span className="text-accent">Log</span>
           </span>

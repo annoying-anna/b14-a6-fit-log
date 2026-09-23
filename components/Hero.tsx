@@ -1,6 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, BicepsFlexed, Flame, Timer } from "lucide-react";
+
+import PublicImage from "@/components/PublicImage";
 
 const HERO_STATS = [
   { icon: BicepsFlexed, label: "12 lifts", value: "Every major muscle group" },
@@ -62,12 +63,12 @@ export default function Hero() {
             aria-hidden
             className="absolute inset-x-12 bottom-8 h-40 rounded-full bg-accent/20 blur-3xl"
           />
-          <Image
+          <PublicImage
             src="/fitlog-banner.png"
             alt="Anatomical illustration of a lifter training on a cable machine"
             width={334}
             height={334}
-            priority
+            eager
             className="relative z-10 w-full drop-shadow-[0_28px_50px_rgba(0,0,0,0.6)]"
           />
         </div>

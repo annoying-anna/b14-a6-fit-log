@@ -4,6 +4,20 @@ import type { Workout } from "@/lib/types";
 /** How long a cached API response stays fresh (seconds). */
 const REVALIDATE_SECONDS = 300;
 
+/**
+ * Next.js tells callers "this route cannot be rendered statically" by throwing an
+ * error with this digest. It is a rendering signal, not a failure, so it must be
+ * re-thrown instead of being swallowed by the resilience below.
+ */
+function isDynamicUsageSignal(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    (error as { digest?: unknown }).digest === "DYNAMIC_SERVER_USAGE"
+  );
+}
+
 type FetchOptions = {
   /** Skip the data cache and always hit the API (used by the home page). */
   fresh?: boolean;
@@ -27,6 +41,8 @@ export async function getWorkouts({ fresh = false }: FetchOptions = {}): Promise
 
     return Array.isArray(data) ? (data as Workout[]) : [];
   } catch (error) {
+    if (isDynamicUsageSignal(error)) throw error;
+
     console.error("FitLog: failed to load the workout library", error);
     return [];
   }
@@ -51,6 +67,8 @@ export async function getWorkoutById(id: string): Promise<Workout | null> {
 
     return data as Workout;
   } catch (error) {
+    if (isDynamicUsageSignal(error)) throw error;
+
     console.error(`FitLog: failed to load workout ${id}`, error);
     return null;
   }
