@@ -12,7 +12,7 @@ and watch your minutes + calories add up in real time.
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 **Repository** · [github.com/annoying-anna/b14-a6-fit-log](https://github.com/annoying-anna/b14-a6-fit-log)<br />
-**Live site** · _run `vercel --prod` (see [Deployment](#️-deployment)) and paste the URL here_
+**Live site** · [annoying-anna.github.io/b14-a6-fit-log](https://annoying-anna.github.io/b14-a6-fit-log/)
 
 </div>
 
@@ -174,6 +174,16 @@ fit-log/
 4. Build command `npm run build`, output handled automatically.
 5. After deploying, check `/`, `/my-plan`, `/workout/1`, a hard reload on a dynamic route, and a mobile viewport.
 
+### Hosted preview (GitHub Pages)
+
+The very same commit is also published by [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) to
+**https://annoying-anna.github.io/b14-a6-fit-log/**
+
+The workflow builds with `NEXT_STATIC_EXPORT=1 NEXT_BASE_PATH=/b14-a6-fit-log`, which switches
+`next.config.ts` into a fully static export (`output: "export"`, `trailingSlash: true`, unoptimized images).
+Vercel — or any Node host — builds the repository as-is and keeps server rendering + ISR, so no environment
+variables are needed for the primary deployment.
+
 ### Requirement coverage
 
 - ✅ Navbar with logo, active link highlight, filled **Plan** badge and outlined **Saved** badge
@@ -184,6 +194,19 @@ fit-log/
 - ✅ Custom 404 page, home loading animation, global error boundary, dark footer
 - ✅ Challenge C1 (Sort By dropdown), C2 (this README), C3 (Mark as done + X remove)
 - ✅ Optional extras: localStorage persistence, search, five-lift plan cap
+
+
+---
+
+## 📝 Notes
+
+- Invalid workout ids (`/workout/999`) render this project's custom 404 page. Next.js streams dynamic
+  segments, so that response keeps a `200` status; genuinely unknown routes (`/anything-else`) answer with a
+  real `404`.
+- The plan / saved list / done ticks live in `localStorage` under `fitlog:plan` and are hydrated through
+  `useSyncExternalStore`, which keeps the server markup and the first client render identical.
+- `lib/api.ts` treats a network failure as an empty library instead of an exception, so an API outage degrades
+  to a friendly message rather than a crashed page.
 
 ---
 
