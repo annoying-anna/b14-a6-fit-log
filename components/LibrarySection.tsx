@@ -1,17 +1,51 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SearchX } from "lucide-react";
 
+import LibrarySkeleton from "@/components/LibrarySkeleton";
+import LibraryUnavailable from "@/components/LibraryUnavailable";
 import SearchInput from "@/components/SearchInput";
 import SortDropdown from "@/components/SortDropdown";
 import WorkoutCard from "@/components/WorkoutCard";
+import { getWorkouts } from "@/lib/api";
 import { matchesQuery, sortWorkouts } from "@/lib/sort";
 import type { SortKey, Workout } from "@/lib/types";
 
-export default function LibrarySection({ workouts }: { workouts: Workout[] }) {
+type LibrarySectionProps = {
+  /** Workouts already rendered on the server (empty for a fully static host). */
+  workouts: Workout[];
+  /** Fetch the library in the browser — used by the static GitHub Pages build. */
+  autoFetch?: boolean;
+};
+
+export default function LibrarySection({
+  workouts: initialWorkouts,
+  autoFetch = false,
+}: LibrarySectionProps) {
+  const [workouts, setWorkouts] = useState(initialWorkouts);
+  const [isLoading, setIsLoading] = useState(autoFetch && initialWorkouts.length === 0);
+  const [hasFailed, setHasFailed] = useState(false);
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("duration");
+
+  // Only runs when the server could not provide the data (static export).
+  useEffect(() => {
+    if (!isLoading) return;
+
+    let isMounted = true;
+
+    getWorkouts({ fresh: true }).then((list) => {
+      if (!isMounted) return;
+      setWorkouts(list);
+      setHasFailed(list.length === 0);
+      setIsLoading(false);
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isLoading]);
 
   const visibleWorkouts = useMemo(
     () => sortWorkouts(workouts.filter((workout) => matchesQuery(workout, query)), sortKey),
@@ -28,9 +62,12 @@ export default function LibrarySection({ workouts }: { workouts: Workout[] }) {
             Twelve lifts covering every major muscle group.
           </p>
         </div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-strong">
-          Showing {visibleWorkouts.length} of {workouts.length} lifts
-        </p>
+
+        {!isLoading ? (
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-strong">
+            Showing {visibleWorkouts.length} of {workouts.length} lifts
+          </p>
+        ) : null}
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -43,7 +80,18 @@ export default function LibrarySection({ workouts }: { workouts: Workout[] }) {
         <SortDropdown value={sortKey} onChange={setSortKey} />
       </div>
 
-      {visibleWorkouts.length > 0 ? (
+      {isLoading ? (
+        <div className="mt-6">
+          <LibrarySkeleton label="Loading workouts…" />
+        </div>
+      ) : hasFailed ? (
+        <LibraryUnavailable
+          onRetry={() => {
+            setHasFailed(false);
+            setIsLoading(true);
+          }}
+        />
+      ) : visibleWorkouts.length > 0 ? (
         <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {visibleWorkouts.map((workout) => (
             <WorkoutCard key={workout.id} workout={workout} />
