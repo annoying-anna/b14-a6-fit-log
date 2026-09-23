@@ -11,7 +11,8 @@ and watch your minutes + calories add up in real time.
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-`Live site:` **TODO-add-your-vercel-url** &nbsp;·&nbsp; `Repository:` **TODO-add-your-github-url**
+**Repository** · [github.com/annoying-anna/b14-a6-fit-log](https://github.com/annoying-anna/b14-a6-fit-log)<br />
+**Live site** · _run `vercel --prod` (see [Deployment](#️-deployment)) and paste the URL here_
 
 </div>
 
