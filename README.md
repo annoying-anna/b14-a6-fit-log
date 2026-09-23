@@ -31,6 +31,42 @@ Oswald display type and one loud lime accent (`#ccff00`).
 
 ---
 
+## 📸 Screenshots
+
+**Home — hero banner, status badges and the BROWSE WORKOUTS call to action**
+
+![FitLog home page with the FITLOG navbar, Plan and Saved badges and the hero banner](screenshots/01-home-hero.png)
+
+**The library — twelve lifts in a responsive grid with category pills, equipment and stats**
+
+![The library section showing twelve workout cards with muscle-group pills and duration, calories and rating stats](screenshots/02-workout-library.png)
+
+**Workout details — media column, key specs and step-by-step instructions**
+
+| Detail page | Key specs & instructions |
+|-------------|--------------------------|
+| ![Barbell Bench Press detail page](screenshots/03-workout-details.png) | ![Key specs panel and instructions list](screenshots/04-workout-details-specs.png) |
+
+**My Plan — live metrics, tabs and toast notifications**
+
+| Today's plan (Mark as done + toast) | Saved tab |
+|-------------------------------------|-----------|
+| ![My Plan page with metric cards, a done workout and a toast](screenshots/06-my-plan-with-toast.png) | ![Saved tab with saved lifts](screenshots/07-my-plan-saved-tab.png) |
+
+**Empty state and 404 page**
+
+| Nothing here yet | Wrong rep, no such page |
+|------------------|--------------------------|
+| ![Empty state with the Go to workouts call to action](screenshots/05-my-plan-empty.png) | ![Custom 404 page](screenshots/10-not-found.png) |
+
+**Mobile (390 px)**
+
+| Hero | Library |
+|------|---------|
+| ![Mobile home page](screenshots/08-mobile-home.png) | ![Mobile library grid](screenshots/09-mobile-library.png) |
+
+---
+
 ## ✨ Key features
 
 | # | Feature | What it does |
@@ -41,7 +77,7 @@ Oswald display type and one loud lime accent (`#ccff00`).
 | 4 | **Search & Sort By** | Free-text search across workout name, equipment and muscle-group tags, plus a chevron dropdown that re-sorts by Duration, Calories or Rating. |
 | 5 | **Mark as done & remove** | Planned lifts can be ticked off (line-through + DONE chip) or removed with the X button — every action fires a relevant toast notification. |
 | 6 | **localStorage persistence** | The plan, the saved list and the done ticks survive a full page reload (hydrated through `useSyncExternalStore`, so there is no hydration mismatch). |
-| 7 | **Loading, empty & 404 states** | Animated loading placeholders while the API resolves, a themed empty state with a **Go to workouts** CTA, a custom 404 page and a global error boundary. |
+| 7 | **Loading, empty & 404 states** | Animated loading placeholders while the API resolves (visible on the live site, which fetches the library in the browser), a themed empty state with a **Go to workouts** CTA, a custom 404 page and a global error boundary. |
 | 8 | **Responsive by default** | Verified from 390 px phones up to 1440 px desktops — the navbar wraps, the hero stacks, the grid collapses and nothing overflows. |
 
 ---
@@ -128,7 +164,7 @@ friendly "Library unavailable" panel with a reload action.
 fit-log/
 ├── app/
 │   ├── layout.tsx              # fonts, navbar, footer, toaster, PlanProvider, metadata
-│   ├── page.tsx                # home — hero + library (server fetched)
+│   ├── page.tsx                # home — hero + library (server or client fetched)
 │   ├── loading.tsx             # "Loading workouts…" animation + skeleton grid
 │   ├── not-found.tsx           # custom 404
 │   ├── error.tsx               # global error boundary
@@ -138,16 +174,20 @@ fit-log/
 │       └── loading.tsx         # detail skeleton
 ├── components/                 # Navbar, Footer, Hero, LibrarySection, WorkoutCard,
 │                               # SortDropdown, SearchInput, PlanWorkoutCard, StatCard,
-│                               # EmptyState, WorkoutDetailActions, MyPlanView
+│                               # EmptyState, WorkoutDetailActions, MyPlanView,
+│                               # LibrarySkeleton, LibraryUnavailable, PublicImage
 ├── context/PlanContext.tsx     # Context API wrapper + toast feedback
 ├── lib/
 │   ├── api.ts                  # FitLog API client (resilient fetch)
 │   ├── plan-store.ts           # external store: plan / saved / done + localStorage
 │   ├── sort.ts                 # sort options, sorting + search helpers
 │   ├── format.ts               # titleCase, pluralize
+│   ├── public-path.ts          # base-path helper for /public files
 │   ├── constants.ts            # API url, PLAN_LIMIT (5), storage key
 │   └── types.ts                # Workout, SortKey, PlanTotals, PlanTab
-└── public/                     # fitlog-logo.png, fitlog-banner.png
+├── screenshots/                # images used in this README
+├── .github/workflows/          # deploy-pages.yml — static export for the live preview
+└── public/                     # fitlog-logo.png, fitlog-banner.png, .nojekyll
 ```
 
 ---
@@ -212,4 +252,11 @@ variables are needed for the primary deployment.
 
 ## 👤 Author
 
-Built as the **B14-A6 Fit Log** assignment — original work, no copied code. Train hard, log honest. 🏋️
+**B14-A6 Fit Log** — individual assignment submission.
+
+| | |
+|---|---|
+| **GitHub** | [@annoying-anna](https://github.com/annoying-anna) |
+| **Live site** | [annoying-anna.github.io/b14-a6-fit-log](https://annoying-anna.github.io/b14-a6-fit-log/) |
+| **Built with** | Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 |
+| **Data source** | [api.abcz.workers.dev/api/fitlog](https://api.abcz.workers.dev/api/fitlog) |
