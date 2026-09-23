@@ -1,26 +1,108 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ------------------------------------------------------------------
+   FitLog design tokens — values taken from the official Figma / Penpot
+   kit ("Fit Log"): charcoal surfaces, hairline borders, one lime accent.
+   ------------------------------------------------------------------ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #0f1115;
+  --color-ink-soft: #13161d;
+  --color-panel: #15171d;
+  --color-panel-2: #1a1e26;
+  --color-line: #232732;
+  --color-line-soft: #1b1f28;
+  --color-muted: #9ca3af;
+  --color-muted-strong: #8a92a0;
+  --color-accent: #ccff00;
+  --color-accent-soft: #c2f10d;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-oswald), "Arial Narrow", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-ink);
+    color: #ffffff;
+    font-family: var(--font-sans);
+  }
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Consistent page gutters on every breakpoint. */
+  .shell {
+    @apply mx-auto w-full max-w-[1216px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.3em] text-accent;
+  }
+
+  .display-title {
+    @apply font-display font-bold uppercase leading-[0.95] tracking-tight;
+  }
+
+  .tag-pill {
+    @apply inline-flex items-center rounded-full border border-line bg-ink-soft/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted;
+  }
+
+  .card-panel {
+    @apply rounded-2xl border border-line bg-panel;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-[12px] font-bold uppercase tracking-[0.16em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-ink hover:bg-accent-soft;
+  }
+
+  .btn-outline {
+    @apply border border-line text-white hover:border-accent hover:text-accent;
+  }
+
+  .btn-ghost {
+    @apply border border-line-soft bg-ink-soft text-muted hover:text-white;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-line bg-ink-soft px-4 py-3 text-sm text-white transition placeholder:text-muted-strong focus:border-accent focus:outline-none;
+  }
+
+  .spec-row {
+    @apply flex items-center justify-between gap-4 border-b border-line-soft py-3 last:border-b-0;
+  }
+
+  .stat-tile {
+    @apply flex items-center gap-4 rounded-2xl border border-line bg-panel px-4 py-5;
+  }
+
+  .icon-chip {
+    @apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-ink-soft text-accent;
+  }
+
+  .icon-btn {
+    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-soft bg-ink-soft text-muted transition hover:border-accent/60 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+  }
+
+  .skeleton-block {
+    @apply animate-pulse rounded-xl border border-line-soft bg-panel;
+  }
+}
+
+/* Keep the mobile nav strip scrollable without a visible scrollbar. */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
